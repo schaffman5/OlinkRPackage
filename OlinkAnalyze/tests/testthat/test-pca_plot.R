@@ -23,30 +23,34 @@ pca_plot_treatCol_topLoadings <- npx_data1 %>%
 
 # To use expect_snapshot_file() you'll typically need to start by writing
 # a helper function that creates a file from your code, returning a path
-save_png <- function(code, width = 400, height = 400) {
+save_png <- function(plot, width = 400, height = 400) {
   path <- tempfile(fileext = ".png")
   png(path, width = width, height = height)
   on.exit(dev.off())
-  code
+  ggplot2::update_geom_defaults("point", list(shape = 17))
+  print(
+    plot +
+      set_plot_theme(font = "")
+    )
 
   path
 }
 
 # You'd then also provide a helper that skips tests where you can't
 # be sure of producing exactly the same output
-expect_snapshot_plot <- function(name, code) {
+expect_snapshot_plot <- function(name, plot) {
   # Other packages might affect results
   skip_if_not_installed("ggplot2", "2.0.0")
   # You'll need to carefully think about and experiment with these skips
 
   name <- paste0(name, ".png")
 
-  # Announce the file before touching `code`. This way, if `code`
+  # Announce the file before touching `plot`. This way, if `plot`
   # unexpectedly fails or skips, testthat will not auto-delete the
   # corresponding snapshot file.
   announce_snapshot_file(name = name)
 
-  path <- save_png(code)
+  path <- save_png(plot)
   expect_snapshot_file(path, name)
 }
 
@@ -64,8 +68,8 @@ test_that("olink_pca_plot works", {
     )
   )
 
-  expect_snapshot_plot('PCA_plot', print(pca_plot))
-  expect_snapshot_plot('PCA_plot_color_by_treatment', print(pca_plot_treatCol))
-  expect_snapshot_plot('PCA_plot_with_loadings', print(pca_plot_treatCol_topLoadings))
-  expect_snapshot_plot('PCA_plot_drop_assays_and_drop_samples', print(pca_plot_drop))
+  expect_snapshot_plot('PCA_plot', pca_plot)
+  expect_snapshot_plot('PCA_plot_color_by_treatment', pca_plot_treatCol)
+  expect_snapshot_plot('PCA_plot_with_loadings', pca_plot_treatCol_topLoadings)
+  expect_snapshot_plot('PCA_plot_drop_assays_and_drop_samples', pca_plot_drop)
 })
