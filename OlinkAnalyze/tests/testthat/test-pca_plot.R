@@ -64,6 +64,10 @@ expect_snapshot_plot <- function(name, plot) {
 }
 
 
+test_that("geom_point works", {
+  p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  vdiffr::expect_doppelganger('mtcars', p)
+})
 
 
 test_that("olink_pca_plot works", {
@@ -85,7 +89,4 @@ test_that("olink_pca_plot works", {
 })
 
 
-test_that("geom_point works", {
-  p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
-  vdiffr::expect_doppelganger('mtcars', p)
-})
+
