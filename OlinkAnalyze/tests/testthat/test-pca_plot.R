@@ -5,6 +5,7 @@ load(refRes_file)
 
 pca_plot <- npx_data1 %>%
   mutate(SampleID = paste(SampleID, "_", Index, sep = "")) %>%
+  arrange(SampleID) %>%
   olink_pca_plot()
 
 pca_plot_treatCol <- npx_data1 %>%
@@ -33,7 +34,7 @@ save_png <- function(plot, width = 400, height = 400) {
       theme(text = element_text(size=10),
             axis.text.x = element_text(size=10),
             axis.text.y = element_text(size=10)),
-    device = "png",
+    device = png,
     width = width,
     height = height,
     units = "px",
@@ -76,8 +77,9 @@ test_that("olink_pca_plot works", {
     )
   )
 
-  expect_snapshot_plot('PCA_plot', pca_plot)
-  expect_snapshot_plot('PCA_plot_color_by_treatment', pca_plot_treatCol)
-  expect_snapshot_plot('PCA_plot_with_loadings', pca_plot_treatCol_topLoadings)
-  expect_snapshot_plot('PCA_plot_drop_assays_and_drop_samples', pca_plot_drop)
+#  expect_snapshot_plot('PCA_plot', pca_plot)
+#  expect_snapshot_plot('PCA_plot_color_by_treatment', pca_plot_treatCol)
+#  expect_snapshot_plot('PCA_plot_with_loadings', pca_plot_treatCol_topLoadings)
+#  expect_snapshot_plot('PCA_plot_drop_assays_and_drop_samples', pca_plot_drop)
+  vdiffr::expect_doppelganger('PCA_plot', pca_plot)
 })
