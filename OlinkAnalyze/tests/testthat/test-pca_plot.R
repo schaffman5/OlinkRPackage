@@ -83,3 +83,9 @@ test_that("olink_pca_plot works", {
 #  expect_snapshot_plot('PCA_plot_drop_assays_and_drop_samples', pca_plot_drop)
   vdiffr::expect_doppelganger('PCA_plot', pca_plot)
 })
+
+
+test_that("geom_point works", {
+  p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+  vdiffr::expect_doppelganger('mtcars', p)
+})
