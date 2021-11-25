@@ -25,12 +25,20 @@ pca_plot_treatCol_topLoadings <- npx_data1 %>%
 # a helper function that creates a file from your code, returning a path
 save_png <- function(plot, width = 400, height = 400) {
   path <- tempfile(fileext = ".png")
-  png(path, width = width, height = height)
-  on.exit(dev.off())
   ggplot2::update_geom_defaults("point", list(shape = 17))
-  print(
-    plot +
-      set_plot_theme(font = "")
+  ggplot2::ggsave(
+    filename = path,
+    plot = plot +
+      set_plot_theme(font = "") +
+      theme(text = element_text(size=10),
+            axis.text.x = element_text(size=10),
+            axis.text.y = element_text(size=10)),
+    device = "png",
+    width = width,
+    height = height,
+    units = "px",
+    dpi=72,
+    scale = 1
     )
 
   path
