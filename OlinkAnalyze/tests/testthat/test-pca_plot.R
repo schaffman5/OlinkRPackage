@@ -76,6 +76,9 @@ test_that("olink_pca_calc works", {
     olink_pca_calc()
 
   expect_snapshot_value(ll[[1]], style = "deparse")
+  expect_snapshot_value(ll[[2]], style = "deparse")
+  expect_snapshot_value(ll[[3]], style = "deparse")
+  expect_snapshot_value(ll[[4]], style = "deparse")
 
 })
 
