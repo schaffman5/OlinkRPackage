@@ -369,7 +369,7 @@ olink_pca_plot <- function (df,
                     ...)
 
 
-  scores <- ll[[1]]
+  scores <- ll[[1]] %>% tibble::rownames_to_column() %>% arrange(rowname)
   loadings <- ll[[2]]
   PoV <- ll[[3]]
   observation_colors <- ll[[4]]
