@@ -75,7 +75,7 @@ test_that("olink_pca_calc works", {
     mutate(SampleID = paste(SampleID, "_", Index, sep = "")) %>%
     olink_pca_calc()
 
-  expect_snapshot(head(ll[[1]]))
+  expect_snapshot_value(ll[[1]], style = "deparse")
 
 })
 
@@ -90,7 +90,7 @@ test_that("olink_pca_plot works", {
 #  expect_snapshot_plot('PCA_plot_color_by_treatment', pca_plot_treatCol)
 #  expect_snapshot_plot('PCA_plot_with_loadings', pca_plot_treatCol_topLoadings)
 #  expect_snapshot_plot('PCA_plot_drop_assays_and_drop_samples', pca_plot_drop)
-  vdiffr::expect_doppelganger('PCA_plot', pca_plot)
+#  vdiffr::expect_doppelganger('PCA_plot', pca_plot)
 })
 
 
