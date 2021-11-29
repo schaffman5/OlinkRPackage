@@ -89,6 +89,8 @@ test_that("olink_pca_plot works", {
   mutate(SampleID = paste(SampleID, "_", Index, sep = "")) %>%
   olink_pca_plot(drop_assays = TRUE, drop_samples = TRUE)
 
+  expect_snapshot_value(pca_plot$data, style = "deparse")
+
 #  expect_snapshot_plot('PCA_plot', pca_plot)
 #  expect_snapshot_plot('PCA_plot_color_by_treatment', pca_plot_treatCol)
 #  expect_snapshot_plot('PCA_plot_with_loadings', pca_plot_treatCol_topLoadings)
