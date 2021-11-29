@@ -1,4 +1,4 @@
-#' Function to plot a PCA of the data
+#' Function to calculate a PCA of the data
 #'
 #' Generates a PCA projection of all samples from NPX data along two principal components (default PC2 vs. PC1) including the explained variance and dots colored by QC_Warning using stats::prcomp and ggplot2::ggplot.
 #' The values are by default scaled and centered in the PCA and proteins with missing NPX values are by default removed from the corresponding assay.
@@ -19,12 +19,6 @@
 #' @return An object of class "ggplot"
 #' @keywords NPX, PCA
 #' @export
-#' @examples
-#' \donttest{
-#' library(dplyr)
-#' npx_data <- npx_data1 %>%
-#'     mutate(SampleID = paste(SampleID, "_", Index, sep = ""))
-#' olink_pca_plot(df=npx_data, color_g = "QC_Warning")}
 #' @importFrom magrittr %>%
 #' @importFrom dplyr filter select group_by ungroup mutate mutate_at if_else n_distinct summarise left_join arrange distinct
 #' @importFrom stringr str_detect
@@ -320,6 +314,34 @@ olink_pca_calc <- function (df,
 }
 
 
+
+#' Function to plot a PCA of the data
+#'
+#' Generates a PCA projection of all samples from NPX data along two principal components (default PC2 vs. PC1) including the explained variance and dots colored by QC_Warning using stats::prcomp and ggplot2::ggplot.
+#' The values are by default scaled and centered in the PCA and proteins with missing NPX values are by default removed from the corresponding assay.
+#' Unique sample names are required.
+#' Imputation by the median is done for assays with missingness <10\% for multi-plate projects and <5\% for single plate projects.
+#'
+#' @param df data frame in long format with Sample Id, NPX and column of choice for colors
+#' @param color_g Character value indicating which column to use for colors (default QC_Warning)
+#' @param x_val Integer indicating which principal component to plot along the x-axis (default 1)
+#' @param y_val Integer indicating which principal component to plot along the y-axis (default 2)
+#' @param label_samples Logical. If TRUE, points are replaced with SampleID (default FALSE)
+#' @param drop_assays Logical. All assays with any missing values will be dropped. Takes precedence over sample drop.
+#' @param drop_samples Logical. All samples with any missing values will be dropped.
+#' @param n_loadings Integer. Will plot the top n_loadings based on size.
+#' @param loadings_list Character vector indicating for which OlinkID's to plot as loadings. It is possible to use n_loadings and loadings_list simultaneously.
+#' @param verbose Logical. Whether warnings about the number of samples and/or assays dropped or imputed should be printed to the console.
+#' @param ... coloroption passed to specify color order.
+#' @return An object of class "ggplot"
+#' @keywords NPX, PCA
+#' @export
+#' @examples
+#' \donttest{
+#' library(dplyr)
+#' npx_data <- npx_data1 %>%
+#'     mutate(SampleID = paste(SampleID, "_", Index, sep = ""))
+#' olink_pca_plot(df=npx_data, color_g = "QC_Warning")}
 
 olink_pca_plot <- function (df,
                             color_g = "QC_Warning",
