@@ -38,7 +38,7 @@
 #' @importFrom utils head
 #' @importFrom grid unit
 
-olink_pca_plot <- function (df,
+olink_pca_calc <- function (df,
                             color_g = "QC_Warning",
                             x_val = 1,
                             y_val = 2,
@@ -315,6 +315,43 @@ olink_pca_plot <- function (df,
 
   loadings_scaling_factor <- 0.8/max(range_LX/range_PX, range_LY/range_PY)
 
+  return(list(scores, loadings, PoV, observation_colors))
+
+}
+
+
+
+olink_pca_plot <- function (df,
+                            color_g = "QC_Warning",
+                            x_val = 1,
+                            y_val = 2,
+                            label_samples = FALSE,
+                            drop_assays = FALSE,
+                            drop_samples = FALSE,
+                            n_loadings = 0,
+                            loadings_list = NULL,
+                            verbose = TRUE,
+                            ...){
+
+
+  ll <- olink_pca_calc(df,
+                    color_g = "QC_Warning",
+                    x_val = 1,
+                    y_val = 2,
+                    label_samples = FALSE,
+                    drop_assays = FALSE,
+                    drop_samples = FALSE,
+                    n_loadings = 0,
+                    loadings_list = NULL,
+                    verbose = TRUE,
+                    ...)
+
+
+  scores <- ll[[1]]
+  loadings <- ll[[2]]
+  PoV <- ll[[3]]
+  observation_colors <- ll[[4]]
+
   #Plotting
 
   pca_plot <- ggplot2::ggplot(scores, ggplot2::aes(x = PCX, y = PCY)) +
@@ -376,19 +413,19 @@ olink_pca_plot <- function (df,
 
     pca_plot <- pca_plot +
       ggplot2::geom_segment(data = loadings,
-                   ggplot2::aes(x = 0,
-                       y = 0,
-                       xend = LX*loadings_scaling_factor,
-                       yend = LY*loadings_scaling_factor),
-                   arrow = ggplot2::arrow(length = grid::unit(1/2, "picas")),
-                   color = "black") +
+                            ggplot2::aes(x = 0,
+                                         y = 0,
+                                         xend = LX*loadings_scaling_factor,
+                                         yend = LY*loadings_scaling_factor),
+                            arrow = ggplot2::arrow(length = grid::unit(1/2, "picas")),
+                            color = "black") +
       ggrepel::geom_label_repel(data = loadings,
-                       ggplot2::aes(x = LX*loadings_scaling_factor,
-                           y = LY*loadings_scaling_factor,
-                           label = variables),
-                       box.padding = 1,
-                       show.legend = FALSE,
-                       segment.colour = 'gray')
+                                ggplot2::aes(x = LX*loadings_scaling_factor,
+                                             y = LY*loadings_scaling_factor,
+                                             label = variables),
+                                box.padding = 1,
+                                show.legend = FALSE,
+                                segment.colour = 'gray')
   }
 
 

@@ -70,16 +70,21 @@ test_that("geom_point works", {
 })
 
 
+test_that("olink_pca_calc works", {
+  ll <-  npx_data1 %>%
+    mutate(SampleID = paste(SampleID, "_", Index, sep = "")) %>%
+    olink_pca_calc()
+
+  expect_snapshot(head(ll[[1]]))
+
+})
+
+
 test_that("olink_pca_plot works", {
 
-  # Two Warnings thrown: for dropped assays and droppes samples
-  expect_warning(
-    expect_warning(
-      pca_plot_drop <- npx_data1 %>%
-      mutate(SampleID = paste(SampleID, "_", Index, sep = "")) %>%
-      olink_pca_plot(drop_assays = TRUE, drop_samples = TRUE)
-    )
-  )
+  pca_plot_drop <- npx_data1 %>%
+  mutate(SampleID = paste(SampleID, "_", Index, sep = "")) %>%
+  olink_pca_plot(drop_assays = TRUE, drop_samples = TRUE)
 
 #  expect_snapshot_plot('PCA_plot', pca_plot)
 #  expect_snapshot_plot('PCA_plot_color_by_treatment', pca_plot_treatCol)
@@ -87,6 +92,8 @@ test_that("olink_pca_plot works", {
 #  expect_snapshot_plot('PCA_plot_drop_assays_and_drop_samples', pca_plot_drop)
   vdiffr::expect_doppelganger('PCA_plot', pca_plot)
 })
+
+
 
 
 
